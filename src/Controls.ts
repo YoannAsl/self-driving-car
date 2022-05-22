@@ -4,8 +4,14 @@ export class Controls {
     right: boolean = false;
     reverse: boolean = false;
 
-    constructor() {
-        this.#addKeyboardListeners();
+    constructor(controlType: string) {
+        switch (controlType) {
+            case 'player':
+                this.#addKeyboardListeners();
+                break;
+            case 'traffic':
+                this.forward = true;
+        }
     }
 
     #addKeyboardListeners() {

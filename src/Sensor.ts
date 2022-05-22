@@ -24,27 +24,38 @@ export class Sensor {
         this.car = car;
     }
 
-    update(roadBorders: Road['borders']) {
+    update(roadBorders: Road['borders'], traffic: Car[] | []) {
         this.#castRays();
         this.readings = [];
-        for (let i = 0; i < this.rays.length; i++) {
-            this.readings.push(this.#getReading(this.rays[i], roadBorders));
+        for (const ray of this.rays) {
+            this.readings.push(this.#getReading(ray, roadBorders, traffic));
         }
     }
 
-    #getReading(ray: Ray, roadBorders: Road['borders']): Reading | null {
+    #getReading(
+        ray: Ray,
+        roadBorders: Road['borders'],
+        traffic: Car[] | []
+    ): Reading | null {
         let touches = [];
 
-        for (let i = 0; i < roadBorders.length; i++) {
-            const touch = getIntersection(
-                ray[0],
-                ray[1],
-                roadBorders[i][0],
-                roadBorders[i][1]
-            );
+        for (const border of roadBorders) {
+            const touch = getIntersection(ray[0], ray[1], border[0], border[1]);
             if (touch) touches.push(touch);
         }
 
+        for (const trafficCar of traffic) {
+            const poly = trafficCar.polygon;
+            for (let i = 0; i < poly.length; i++) {
+                const touch = getIntersection(
+                    ray[0],
+                    ray[1],
+                    poly[i],
+                    poly[(i + 1) % poly.length]
+                );
+                if (touch) touches.push(touch);
+            }
+        }
         if (touches.length === 0) return null;
 
         const offsets = touches.map((touch) => touch.offset);
