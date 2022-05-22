@@ -1,5 +1,6 @@
 import { lerp } from './utils';
 
+export type RoadBorder = { x: number; y: number }[];
 export class Road {
     x: number;
     width: number;
@@ -8,7 +9,7 @@ export class Road {
     right: number;
     top: number;
     bottom: number;
-    borders: { x: number; y: number }[][];
+    borders: RoadBorder[];
 
     constructor(x: number, width: number, laneCount = 3) {
         this.x = x;

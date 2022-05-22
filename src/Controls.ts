@@ -1,15 +1,10 @@
 export class Controls {
-    forward: boolean;
-    left: boolean;
-    right: boolean;
-    reverse: boolean;
+    forward: boolean = false;
+    left: boolean = false;
+    right: boolean = false;
+    reverse: boolean = false;
 
     constructor() {
-        this.forward = false;
-        this.left = false;
-        this.right = false;
-        this.reverse = false;
-
         this.#addKeyboardListeners();
     }
 
